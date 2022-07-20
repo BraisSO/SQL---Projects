@@ -1,0 +1,28 @@
+select * from customers limit 10;
+select * from orders limit 10;
+select * from books limit 10;
+
+select * from pg_indexes where tablename='customers';
+select * from pg_indexes where tablename='orders';
+select * from pg_indexes where tablename='books';
+
+create index customer_id_idx on orders (customer_id);
+create index book_id_idx on orders (book_id);
+
+explain analyze select original_language, title, sales_in_millions from books where original_language='French';
+
+SELECT pg_size_pretty (pg_total_relation_size('books'));
+
+create index original_language_title_sales_idx on books (original_language, title, sales_in_millions);
+
+explain analyze select original_language, title, sales_in_millions from books where original_language='French';
+
+SELECT pg_size_pretty (pg_total_relation_size('books'));
+
+drop index if exists original_language_title_sales_idx;
+
+SELECT NOW();
+ 
+\COPY orders FROM 'orders_add.txt' DELIMITER ',' CSV HEADER;
+ 
+SELECT NOW();
