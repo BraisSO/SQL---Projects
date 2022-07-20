@@ -1,0 +1,38 @@
+select * from customers limit 10;
+select * from orders limit 10;
+select * from books limit 10;
+
+select *  from pg_indexes where tablename='customers';
+select *  from pg_indexes where tablename='books';
+select *  from pg_indexes where tablename='orders';
+
+explain analyze select customer_id, quantity from orders where quantity>18 order by customer_id, quantity;
+
+create index customer_id_quantity_idx on orders(customer_id desc, quantity) where quantity>18;
+
+explain analyze select customer_id, quantity from orders where quantity>18 order by customer_id, quantity;
+
+explain analyze select * from customers where customer_id<100;
+
+alter table customers
+add primary key (customer_id);
+
+explain analyze select * from customers where customer_id<100;
+
+cluster customers using customers_pkey;
+
+select * from customers limit 10;
+
+create index customer_id_book_id_order_id_idx on  orders (customer_id, book_id, order_id);
+
+drop index customer_id_book_id_order_id_idx;
+
+create index customer_id_book_id_order_id_quantity_idx on  orders (customer_id, book_id, order_id, quantity);
+
+create index book_author_book_title_idx on books (author, title);
+
+explain analyze select * from orders where (quantity*price_base) >100; 
+
+create index total_price_idx on orders ((quantity*price_base));
+
+explain analyze select * from orders where (quantity*price_base) >100; 
